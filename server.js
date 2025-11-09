@@ -13,10 +13,11 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'],
-  credentials: true
+  origin: "*", // Allow all origins
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use(express.json());
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -96,11 +97,11 @@ app.post('/api/memories', async (req, res) => {
   }
 });
 
-// Get teacher's note
+// Get all teacher's notes
 app.get('/api/teacher-note', async (req, res) => {
   try {
-    const note = await TeacherNote.findOne().sort({ createdAt: -1 });
-    res.json(note);
+    const notes = await TeacherNote.find().sort({ createdAt: -1 });
+    res.json(notes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -163,12 +164,12 @@ app.post('/api/seed', async (req, res) => {
     const memories = [
       {
         caption: "Our Amazing Class",
-        imageUrl: "/src/assets/images/WhatsApp Image 2025-10-22 at 14.03.59_75b5e080.jpg",
+        imageUrl: "/images/WhatsApp Image 2025-10-22 at 14.03.59_75b5e080.jpg",
         uploadedBy: "Students"
       },
       {
         caption: "Memorable Moments",
-        imageUrl: "/src/assets/images/WhatsApp Image 2025-11-09 at 10.51.06_1e69b071.jpg",
+        imageUrl: "/images/WhatsApp Image 2025-11-09 at 10.51.06_1e69b071.jpg",
         uploadedBy: "Students"
       }
     ];
